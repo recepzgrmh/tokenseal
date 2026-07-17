@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <code>npx tokenseal setup</code> &nbsp;·&nbsp; then keep using <code>claude</code>
+  <code>tokenseal setup</code> &nbsp;·&nbsp; then keep using <code>claude</code>
 </p>
 
 <p align="center">
@@ -55,24 +55,40 @@ TokenSeal has two parts:
    and gives you local, read-only tools (`doctor`, `status`, `audit`,
    `explain-last`, `benchmark`). Zero runtime dependencies.
 
+## Installation
+
+> **Not on npm yet.** `npx tokenseal` will work once v0.1.0 is published. Until
+> then, install from GitHub or from a local clone:
+
+```bash
+# From GitHub (builds on install)
+npm install -g github:recepzgrmh/tokenseal
+
+# …or from a local clone
+git clone https://github.com/recepzgrmh/tokenseal
+cd tokenseal && npm install && npm link
+```
+
+Either way you then have a global `tokenseal` command.
+
 ## 30-second quickstart
 
 ```bash
 # 1. Install the plugin at user scope (interactive; asks a few presentation questions)
-npx tokenseal setup
+tokenseal setup
 
 # 2. Keep working exactly as before
 claude
 
 # 3. Anytime, inspect what TokenSeal is doing (all read-only)
-npx tokenseal status        # plugin + last task
-npx tokenseal doctor        # validate the installation
-npx tokenseal audit         # report context inefficiencies (changes nothing)
-npx tokenseal explain-last  # summarize the most recent task receipt
-npx tokenseal benchmark     # filter token reduction on sample outputs
+tokenseal status        # plugin + last task
+tokenseal doctor        # validate the installation
+tokenseal audit         # report context inefficiencies (changes nothing)
+tokenseal explain-last  # summarize the most recent task receipt
+tokenseal benchmark     # filter token reduction on sample outputs
 ```
 
-Non-interactive install: `npx tokenseal setup --yes`.
+Non-interactive install: `tokenseal setup --yes`.
 
 ## Architecture
 
@@ -232,8 +248,8 @@ task. See [`docs/git-checkpoints.md`](docs/git-checkpoints.md).
 Run it yourself:
 
 ```bash
-npx tokenseal benchmark          # human-readable
-npx tokenseal benchmark --json   # machine-readable
+tokenseal benchmark          # human-readable
+tokenseal benchmark --json   # machine-readable
 ```
 
 `tokenseal benchmark` measures exactly **one** thing: how much the output
@@ -282,8 +298,8 @@ See [`SECURITY.md`](SECURITY.md) and [`docs/security.md`](docs/security.md).
 ## Uninstall
 
 ```bash
-npx tokenseal uninstall              # remove plugin; restore settings backup; keep your data
-npx tokenseal uninstall --purge --yes  # also delete ~/.claude/tokenseal/ (config + receipts)
+tokenseal uninstall              # remove plugin; restore settings backup; keep your data
+tokenseal uninstall --purge --yes  # also delete ~/.claude/tokenseal/ (config + receipts)
 ```
 
 Uninstall reverses everything setup did and restores `~/.claude/settings.json`

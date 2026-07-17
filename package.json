@@ -49,6 +49,7 @@
     "test:integration": "node --test --experimental-strip-types \"tests/integration/**/*.test.ts\"",
     "eval": "node --experimental-strip-types tests/evals/run.ts",
     "prepublishOnly": "npm run build",
+    "prepare": "npm run build",
     "dev": "node --experimental-strip-types src/cli/index.ts"
   },
   "devDependencies": {
