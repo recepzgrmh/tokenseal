@@ -32,6 +32,18 @@ function loadConfig() {
   }
 }
 
+// Concrete output-token compression rules for the terse profiles. These change
+// only the model's PROSE — code, commands, paths, and errors stay byte-exact —
+// so the actual work and its quality are unaffected.
+const TERSE_RULES = [
+  'Output economy (this profile): minimize output tokens without losing substance.',
+  '- No preamble, greetings, sycophancy, or self-reference ("Sure!", "I hope this helps").',
+  '- Do not restate the question or re-summarize what you already said.',
+  '- Answer directly; prefer short sentences, fragments, and lists over paragraphs.',
+  '- Omit unsolicited alternatives/caveats unless correctness requires them.',
+  '- Preserve ALL code, commands, file paths, and error text byte-for-byte exact.',
+];
+
 function buildCore(cfg) {
   const lines = [
     'TokenSeal is active for this session — an always-on efficiency and assurance layer.',
@@ -42,8 +54,12 @@ function buildCore(cfg) {
     '- Turn each request into explicit, verifiable goals before acting.',
     '- Find the root cause before fixing; do not patch symptoms.',
     '- Require evidence (tests, build, observed behavior) before calling anything done.',
-    `Active presentation profile: ${cfg.verbosity} — match your reporting detail to it.`,
+    `Active presentation profile: ${cfg.verbosity}.`,
   ];
+  // brief/silent get real compression; detailed/summary keep normal verbosity.
+  if (cfg.verbosity === 'brief' || cfg.verbosity === 'silent') {
+    lines.push(...TERSE_RULES);
+  }
   if (cfg.invalid) {
     lines.push('Note: TokenSeal config was unreadable; using default (summary) profile.');
   }

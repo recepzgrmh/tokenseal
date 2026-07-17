@@ -9,6 +9,20 @@ TokenSeal aims to be honest about what it does and does not do in v0.1.0.
 - Filter thresholds and context budgets are **safe, best-effort heuristics**, not
   proven-optimal values. They are tunable and benchmarkable.
 
+## Where the token savings do and don't come from (empirically checked)
+
+- **Savings are output-side.** TokenSeal's real efficiency comes from the
+  `brief`/`silent` profiles compressing the model's prose (~37% fewer output
+  tokens measured on a verbose task). On terse tasks it is net-negative — see
+  `benchmarks.md`.
+- **No automatic tool-output filtering in a live session.** We empirically tested
+  a `PostToolUse` hook returning `updatedToolOutput` (both nestings) against real
+  Claude Code 2.1.212 — it did **not** replace the tool result the model
+  ingested. Claude Code also already truncates tool results over ~10,000 chars to
+  a file + preview. So the `src/filters` library powers `tokenseal benchmark` and
+  receipt storage, **not** an automatic session interceptor. We do not do blind
+  `PreToolUse` command rewriting (it would risk hiding the very output you need).
+
 ## Runtime behavior we can't fully test offline
 
 - Hook execution, skill triggering, subagent delegation, and worktree creation

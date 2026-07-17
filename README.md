@@ -98,33 +98,44 @@ The CLI never makes LLM calls — it only does local analysis and installation.
 All shared user data lives under `~/.claude/tokenseal/`, never inside your
 project source tree.
 
-## How it saves tokens
+## How it saves tokens (and where it doesn't)
 
-TokenSeal applies **filter-before-fetch**: keep the compact form in context,
-store the full form on disk, fetch detail only when asked.
+The **primary, measured** lever is **output-verbosity compression**. The
+`brief` and `silent` profiles inject concrete rules that cut the model's prose —
+no preamble, no restating the question, terse lists over paragraphs — while
+keeping all code, commands, and errors byte-for-byte exact. In a controlled
+A/B on a verbose task (real `claude -p`, same prompt), this reduced **output
+tokens by ~37%** with full quality retention. This is the same mechanism tools
+like `caveman` use.
 
-- **Adaptive output filters.** The filter rule that fires depends on the
-  payload *kind*, *size*, and *success/failure* signal — not blind truncation:
-  - Large JSON blobs become a structural summary (type, length, top-level keys).
-  - Long *passing* test output collapses to its summary line plus the tail.
-  - Long noisy bash output keeps head + tail.
-  - **Failing output is always preserved verbatim.** A filter that hides a stack
-    trace is treated as a bug.
-- **Full output is always recoverable.** The complete (secret-masked) output is
-  written to a temp file, so nothing is lost — it just isn't sitting in your
-  context window.
-- **Subagent isolation.** Exploration, implementation, verification, and review
-  run as scoped subagents so bulk file reading and tool noise stay out of your
-  main thread.
-- **Receipts instead of re-reading.** Each task writes a small JSON receipt
-  (`~/.claude/tokenseal/receipts/`) so "what did you just do?" is answered from a
-  compact record rather than by re-scanning the session. Receipts are **never**
-  auto-loaded into context.
-- **Secrets are masked** before anything is filtered, stored, or written to a
-  receipt.
+**Honest scope of that saving:**
 
-See [`docs/context-management.md`](docs/context-management.md) and
-[`docs/benchmarks.md`](docs/benchmarks.md).
+- It only helps on **output-heavy** work. On a task whose answer is one line,
+  there is nothing to compress and TokenSeal's small per-session context
+  injection makes it **net-negative** (we measured ~+3.6% on a single-number
+  task). Savings vary by workload — run `tokenseal benchmark` and measure your own.
+- TokenSeal does **not** automatically filter/replace tool output in a live
+  session. Claude Code already caps tool results over ~10,000 chars to a file +
+  preview, and in 2.1.212 a `PostToolUse` hook cannot replace the result the
+  model ingests (we verified this empirically). The filter library
+  (`src/filters`) powers `tokenseal benchmark` and receipts, not an automatic
+  session interceptor.
+
+Secondary levers:
+
+- **Context hygiene.** `tokenseal audit` (read-only) flags an oversized
+  CLAUDE.md, too many MCP servers, or bloated memory that inflate every session's
+  input tokens — you decide what to trim.
+- **Subagent isolation.** Exploration/review run as scoped subagents so bulk
+  reading stays out of your main thread (reduces context *pressure*; total tokens
+  depend on delegation actually happening).
+- **Receipts instead of re-reading.** "What did you just do?" is answered from a
+  small JSON receipt, not by re-scanning the session. Receipts are never
+  auto-loaded and are **secret-masked**.
+
+See [`docs/benchmarks.md`](docs/benchmarks.md) for the measured numbers and
+method, and [`docs/limitations.md`](docs/limitations.md) for the empirical hook
+finding.
 
 ## How it protects quality
 
