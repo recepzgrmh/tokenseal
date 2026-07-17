@@ -6,8 +6,9 @@
  * root) can never let us clobber files we do not own.
  */
 import { homedir } from 'node:os';
-import { resolve, sep, isAbsolute, join } from 'node:path';
+import { resolve, sep, isAbsolute, join, dirname } from 'node:path';
 import { realpathSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 /** Absolute, normalized form of a path (does not require the path to exist). */
 export function canonicalize(input: string): string {
@@ -77,4 +78,32 @@ export function claudeUserDir(): string {
 /** `~/.claude/tokenseal` — TokenSeal's own data root (config, receipts). */
 export function tokensealDataDir(): string {
   return join(claudeUserDir(), 'tokenseal');
+}
+
+/** Per-session runtime state (task/resume packets) written by hooks. */
+export function stateDir(dataDir = tokensealDataDir()): string {
+  return join(dataDir, 'state');
+}
+
+/** Stable, user-owned marketplace copy used to install the plugin. */
+export function installedMarketplaceDir(dataDir = tokensealDataDir()): string {
+  return join(dataDir, 'marketplace');
+}
+
+/**
+ * Root of the installed npm package (or repo in dev). `dist/utils/paths.js` and
+ * `src/utils/paths.ts` both sit two levels below the package root.
+ */
+export function packageRoot(): string {
+  return resolve(fileDir(), '..', '..');
+}
+
+/** The plugin source shipped inside the package at `<packageRoot>/plugin`. */
+export function pluginSourceDir(): string {
+  return join(packageRoot(), 'plugin');
+}
+
+/** Directory of the current module, resolved from import.meta.url. */
+function fileDir(): string {
+  return dirname(fileURLToPath(import.meta.url));
 }

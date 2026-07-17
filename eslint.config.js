@@ -30,4 +30,18 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'off',
     },
   },
+  {
+    // Plugin hook scripts are plain Node ESM (no TS); declare Node globals.
+    files: ['plugin/**/*.mjs'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+        Buffer: 'readonly',
+        URL: 'readonly',
+        globalThis: 'readonly',
+        setTimeout: 'readonly',
+      },
+    },
+  },
 );

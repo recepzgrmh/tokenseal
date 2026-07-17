@@ -1,0 +1,9 @@
+{
+  "name": "tokenseal",
+  "description": "Always-on efficiency and assurance layer for Claude Code: wastes fewer tokens and never lets AI-modified code be called done without independent review.",
+  "version": "0.1.0",
+  "author": { "name": "TokenSeal" },
+  "homepage": "https://github.com/recepzgrmh/tokenseal",
+  "repository": "https://github.com/recepzgrmh/tokenseal",
+  "license": "MIT"
+}
