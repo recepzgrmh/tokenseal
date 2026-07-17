@@ -14,10 +14,10 @@
 </p>
 
 <p align="center">
-  <img alt="license MIT" src="https://img.shields.io/badge/license-MIT-blue.svg">
-  <img alt="node >= 20.11" src="https://img.shields.io/badge/node-%3E%3D20.11-brightgreen.svg">
-  <img alt="Claude Code 2.x" src="https://img.shields.io/badge/Claude%20Code-2.x-8A63D2.svg">
-  <img alt="runtime dependencies: 0" src="https://img.shields.io/badge/runtime%20deps-0-success.svg">
+  <img alt="License MIT" src="https://img.shields.io/badge/license-MIT-blue">
+  <img alt="Node 20.11 plus" src="https://img.shields.io/badge/node-20.11%2B-brightgreen">
+  <img alt="Claude Code 2.x" src="https://img.shields.io/badge/Claude%20Code-2.x-8A63D2">
+  <img alt="Runtime deps 0" src="https://img.shields.io/badge/runtime%20deps-0-success">
 </p>
 
 ---
