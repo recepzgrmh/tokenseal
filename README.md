@@ -1,15 +1,24 @@
-# TokenSeal 🦭
+<p align="center">
+  <img src="assets/logo.png" alt="TokenSeal" width="380">
+</p>
 
-**Seal token leaks. Ship reviewed code.**
+<h1 align="center">TokenSeal&nbsp;🦭</h1>
 
-An always-on efficiency and assurance layer for Claude Code.
+<p align="center">
+  <b>Seal token leaks. Ship reviewed code.</b><br>
+  An always-on efficiency &amp; assurance layer for Claude Code.
+</p>
 
-```
-Install    npx tokenseal setup
-Then keep using:  claude
-```
+<p align="center">
+  <code>npx tokenseal setup</code> &nbsp;·&nbsp; then keep using <code>claude</code>
+</p>
 
-Session Efficiency & Assurance Layer for Claude Code.
+<p align="center">
+  <img alt="license MIT" src="https://img.shields.io/badge/license-MIT-blue.svg">
+  <img alt="node >= 20.11" src="https://img.shields.io/badge/node-%3E%3D20.11-brightgreen.svg">
+  <img alt="Claude Code 2.x" src="https://img.shields.io/badge/Claude%20Code-2.x-8A63D2.svg">
+  <img alt="runtime dependencies: 0" src="https://img.shields.io/badge/runtime%20deps-0-success.svg">
+</p>
 
 ---
 
