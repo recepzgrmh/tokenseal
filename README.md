@@ -100,13 +100,30 @@ project source tree.
 
 ## How it saves tokens (and where it doesn't)
 
-The **primary, measured** lever is **output-verbosity compression**. The
-`brief` and `silent` profiles inject concrete rules that cut the model's prose —
-no preamble, no restating the question, terse lists over paragraphs — while
-keeping all code, commands, and errors byte-for-byte exact. In a controlled
-A/B on a verbose task (real `claude -p`, same prompt), this reduced **output
-tokens by ~37%** with full quality retention. This is the same mechanism tools
-like `caveman` use.
+**Primary lever — cost-aware model routing.** For substantial exploration,
+search, and analysis, TokenSeal delegates the grunt work to a cheaper-tier
+subagent (`codebase-explorer` on Haiku) and keeps only synthesis and decisions
+on the expensive model. Because Haiku is ~15× cheaper per token than Opus,
+moving the bulk reading off the main model cuts cost sharply.
+
+Measured A/B on a **real 75k-line Flutter codebase** (real `claude -p`,
+"analyze the architecture" task, same prompt, single trial each):
+
+| | Baseline (all Opus) | TokenSeal (delegation) |
+| --- | --- | --- |
+| Cost | **$4.07** | **$1.28** (**−68.5%**) |
+| Models | Opus only | Opus (orchestrate) + Haiku (24k-token exploration) |
+| Quality | all 5 report sections | **all 5 — equal** |
+
+The saving only materializes when the task is **big enough to delegate**; on a
+small task the model just does it directly and there is nothing to route
+(single trial, n=1 — directional, not a controlled study; run your own).
+
+**Secondary lever — output-verbosity compression.** The `brief`/`silent`
+profiles inject concrete rules that cut the model's prose — no preamble, no
+restating the question, terse lists — while keeping all code, commands, and
+errors byte-for-byte exact. Measured **~37% fewer output tokens** on a verbose
+task with full quality retention (the same mechanism `caveman` uses).
 
 **Honest scope of that saving:**
 

@@ -26,7 +26,26 @@ output. Representative results **on those samples**:
 Notice the failing-test case is *low* on purpose — the error is preserved, which
 is the point.
 
-## Measured A/B on real `claude -p` sessions
+## Measured A/B — cost-aware model routing (the headline result)
+
+On a **real 75k-line Flutter codebase** (196 Dart files), same architecture-analysis
+prompt, real `claude -p --output-format=json`, single trial each:
+
+| Arm | Cost | Models used | Quality (5 sections) |
+| --- | --- | --- | --- |
+| Baseline (all Opus) | **$4.07** | opus only (out 47k) | ✓✓✓✓✓ |
+| TokenSeal (delegation) | **$1.28 (−68.5%)** | opus orchestrate ($0.70) + **haiku exploration** ($0.58, out 24k) | ✓✓✓✓✓ |
+
+Both reports covered all five requested sections with comparable length
+(~12.3k vs ~10.0k chars) and specificity. The cost drop comes from Haiku doing
+the heavy multi-file reading instead of Opus. Requires the task to be large
+enough that the model delegates — on small tasks there is nothing to route.
+
+Honesty: n=1 per arm — directional, not a controlled study. An earlier attempt at
+this A/B was **invalidated** because the TokenSeal arm hit a 429 rate limit
+mid-run; we re-ran it cleanly before reporting. Run it on your own project.
+
+## Measured A/B — output-verbosity compression
 
 Beyond the filter samples, we ran controlled A/B tests with the real Claude Code
 binary (`claude -p --output-format=json`), same prompt, two arms: a clean HOME vs
