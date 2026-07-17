@@ -22,6 +22,13 @@ TokenSeal aims to be honest about what it does and does not do in v0.1.0.
 
 ## Environment
 
+- **Windows install path is not yet verified.** The CLI logic, filters, config,
+  and analysis are cross-platform and unit-tested, but the `tokenseal setup`
+  installer shells out to the `claude` CLI, which on Windows is typically a
+  `claude.cmd` shim that `execFile` (shell-less, by design) cannot resolve. The
+  installer path is verified on **macOS and Linux**; a Windows installer fixture
+  is tracked as work in progress (see `CONTRIBUTING.md`). Prefer WSL on Windows
+  for now.
 - **Worktree isolation** needs git and a recent Claude Code (≥ 2.1.128). Below
   that, or outside a git repo, TokenSeal degrades to snapshot-diff checkpoints.
 - The completion gate relies on task state written by the plugin at runtime; if

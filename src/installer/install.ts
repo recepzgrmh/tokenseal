@@ -7,7 +7,7 @@
  * best-effort rollback so a partial install never leaves the user stuck.
  */
 import { run, type RunResult } from '../utils/proc.ts';
-import { claudeUserDir, tokensealDataDir } from '../utils/paths.ts';
+import { claudeUserDir, tokensealDataDir, assertWithinRoot } from '../utils/paths.ts';
 import {
   buildMarketplace,
   removeMarketplaceDir,
@@ -163,7 +163,11 @@ export async function uninstallPlugin(opts: UninstallOptions = {}): Promise<Inst
 
   if (opts.purgeData) {
     const { rmSync, existsSync } = await import('node:fs');
-    if (existsSync(dataDir)) rmSync(dataDir, { recursive: true, force: true });
+    if (existsSync(dataDir)) {
+      // Provably confine the recursive delete to inside the Claude user dir.
+      assertWithinRoot(dataDir, userDir);
+      rmSync(dataDir, { recursive: true, force: true });
+    }
     steps.push({ name: 'purge-data', ok: true, detail: `removed ${dataDir}` });
   }
 

@@ -19,6 +19,18 @@ test('masks KEY=value assignments but keeps the key name', () => {
   assert.ok(!out.includes('supersecretvalue123'));
 });
 
+test('masks a multi-word quoted secret value in full', () => {
+  const out = maskSecrets('PASSWORD="my secret pass phrase"');
+  assert.match(out, /PASSWORD=/);
+  assert.ok(!out.includes('secret pass phrase'), out);
+});
+
+test('masks a short secret value (< 4 chars)', () => {
+  const out = maskSecrets('API_KEY=abc');
+  assert.ok(!out.includes('abc'));
+  assert.match(out, /API_KEY=/);
+});
+
 test('does not mask ordinary text', () => {
   const s = 'the quick brown fox jumps over 12345';
   assert.equal(maskSecrets(s), s);

@@ -254,10 +254,14 @@ to its pre-install state. It is idempotent.
 
 ## Requirements
 
-- **Node.js >= 20.11** (developed and verified on Node 26).
+- **Node.js >= 20.11** to run the published CLI (developed and verified on Node
+  26). Building/testing from source needs **Node >= 22.6** (TypeScript
+  type-stripping).
 - **Claude Code >= 2.0.0** minimum. Full worktree isolation and compaction-aware
   checkpoints need **>= 2.1.128**; below that, TokenSeal degrades gracefully to
   snapshot-diff fallbacks. Developed and verified against Claude Code 2.1.212.
+- **OS:** the installer is verified on **macOS and Linux**. Windows support is in
+  progress — use WSL for now (see [`docs/limitations.md`](docs/limitations.md)).
 
 ## FAQ
 

@@ -13,8 +13,9 @@ npm install
 npm run typecheck && npm run lint && npm test && npm run build
 ```
 
-Node.js >= 20.11 is required (developed on Node 26, which runs the TypeScript
-sources directly via type-stripping — no build step needed for tests).
+Node.js **>= 22.6** is required to develop (it runs the TypeScript sources
+directly via type-stripping — no build step needed for tests; developed on Node
+26). The *published* CLI is compiled `dist/` JS and runs on Node >= 20.11.
 
 ## Definition of done (every PR)
 

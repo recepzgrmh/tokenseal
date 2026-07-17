@@ -6,7 +6,12 @@
  */
 import { join } from 'node:path';
 import { cpSync, rmSync, existsSync } from 'node:fs';
-import { installedMarketplaceDir, pluginSourceDir } from '../utils/paths.ts';
+import {
+  installedMarketplaceDir,
+  pluginSourceDir,
+  tokensealDataDir,
+  assertWithinRoot,
+} from '../utils/paths.ts';
 import { atomicWrite, ensureDir } from '../utils/fs-atomic.ts';
 
 export const MARKETPLACE_NAME = 'tokenseal-marketplace';
@@ -56,8 +61,11 @@ export function buildMarketplace(
     throw new Error(`Plugin source not found at ${srcDir}. Is the package intact?`);
   }
   ensureDir(join(marketplaceDir, '.claude-plugin'));
-  // Refresh the plugin copy.
-  if (existsSync(pluginDir)) rmSync(pluginDir, { recursive: true, force: true });
+  // Refresh the plugin copy (confined to inside the marketplace dir).
+  if (existsSync(pluginDir)) {
+    assertWithinRoot(pluginDir, marketplaceDir);
+    rmSync(pluginDir, { recursive: true, force: true });
+  }
   cpSync(srcDir, pluginDir, { recursive: true });
   atomicWrite(
     join(marketplaceDir, '.claude-plugin', 'marketplace.json'),
@@ -72,6 +80,11 @@ export function buildMarketplace(
 }
 
 export function removeMarketplaceDir(dataDir?: string): void {
+  const base = dataDir ?? tokensealDataDir();
   const dir = installedMarketplaceDir(dataDir);
-  if (existsSync(dir)) rmSync(dir, { recursive: true, force: true });
+  if (existsSync(dir)) {
+    // Never recursively delete outside the TokenSeal data dir.
+    assertWithinRoot(dir, base);
+    rmSync(dir, { recursive: true, force: true });
+  }
 }

@@ -34,10 +34,15 @@ const PATTERNS: SecretPattern[] = [
 
 /**
  * `KEY=value` / `KEY: value` assignments whose key name signals a secret.
- * We keep the key visible (useful signal) and mask only the value.
+ * We keep the key visible (useful signal) and mask only the value. Two forms:
+ *  - QUOTED captures the whole quoted span so multi-word secrets
+ *    (`PASSWORD="my secret phrase"`) are masked in full, not just the first word.
+ *  - BARE captures a single unquoted token of any length (>=1 char).
  */
-const ASSIGNMENT_KEY =
-  /((?:[A-Za-z0-9_]*)(?:SECRET|TOKEN|PASSWORD|PASSWD|API[_-]?KEY|ACCESS[_-]?KEY|PRIVATE[_-]?KEY|CREDENTIAL|AUTH)(?:[A-Za-z0-9_]*))\s*([=:])\s*(['"]?)([^\s'"]{4,})\3/gi;
+const SECRET_KEY =
+  '((?:[A-Za-z0-9_]*)(?:SECRET|TOKEN|PASSWORD|PASSWD|API[_-]?KEY|ACCESS[_-]?KEY|PRIVATE[_-]?KEY|CREDENTIAL|AUTH)(?:[A-Za-z0-9_]*))';
+const ASSIGNMENT_QUOTED = new RegExp(`${SECRET_KEY}(\\s*[=:]\\s*)(['"])(?:(?!\\3).)+\\3`, 'gi');
+const ASSIGNMENT_BARE = new RegExp(`${SECRET_KEY}(\\s*[=:]\\s*)[^\\s'"]+`, 'gi');
 
 function tag(label: string): string {
   return REDACTION.replace('$LABEL', label);
@@ -50,7 +55,12 @@ export function maskSecrets(input: string): string {
   for (const { label, re } of PATTERNS) {
     out = out.replace(re, tag(label));
   }
-  out = out.replace(ASSIGNMENT_KEY, (_m, key: string, sep: string) => `${key}${sep}${tag('env')}`);
+  // Quoted first (captures multi-word values), then bare single-token values.
+  out = out.replace(
+    ASSIGNMENT_QUOTED,
+    (_m, key: string, sep: string) => `${key}${sep}${tag('env')}`,
+  );
+  out = out.replace(ASSIGNMENT_BARE, (_m, key: string, sep: string) => `${key}${sep}${tag('env')}`);
   return out;
 }
 
