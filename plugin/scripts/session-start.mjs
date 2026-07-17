@@ -54,6 +54,10 @@ function buildCore(cfg) {
     '- Turn each request into explicit, verifiable goals before acting.',
     '- Find the root cause before fixing; do not patch symptoms.',
     '- Require evidence (tests, build, observed behavior) before calling anything done.',
+    'Cost-aware delegation: for substantial file exploration, code/symbol search, or',
+    "log/output analysis, delegate to the 'codebase-explorer' subagent (cheaper model",
+    'tier) via the Task tool and keep only planning, synthesis, and decisions on the',
+    'main model. Skip delegation for trivial single-file lookups where it would not pay off.',
     `Active presentation profile: ${cfg.verbosity}.`,
   ];
   // brief/silent get real compression; detailed/summary keep normal verbosity.
