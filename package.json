@@ -52,7 +52,7 @@
     "dev": "node --experimental-strip-types src/cli/index.ts"
   },
   "devDependencies": {
-    "@eslint/js": "^9.13.0",
+    "@eslint/js": "^10.0.1",
     "@types/node": "^22.7.0",
     "eslint": "^9.13.0",
     "prettier": "^3.3.3",
