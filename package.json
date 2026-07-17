@@ -1,0 +1,62 @@
+{
+  "name": "tokenseal",
+  "version": "0.1.0",
+  "description": "Seal token leaks. Ship reviewed code. An always-on efficiency and assurance layer for Claude Code.",
+  "keywords": [
+    "claude-code",
+    "claude",
+    "ai-coding",
+    "coding-agent",
+    "developer-tools",
+    "token-optimization",
+    "context-engineering",
+    "subagents",
+    "claude-plugin",
+    "code-review"
+  ],
+  "homepage": "https://github.com/tokenseal/tokenseal#readme",
+  "bugs": {
+    "url": "https://github.com/tokenseal/tokenseal/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tokenseal/tokenseal.git"
+  },
+  "license": "MIT",
+  "author": "TokenSeal contributors",
+  "type": "module",
+  "bin": {
+    "tokenseal": "dist/cli/index.js"
+  },
+  "files": [
+    "dist",
+    "plugin",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "test": "node --test --experimental-strip-types \"tests/unit/**/*.test.ts\" \"tests/integration/**/*.test.ts\"",
+    "test:unit": "node --test --experimental-strip-types \"tests/unit/**/*.test.ts\"",
+    "test:integration": "node --test --experimental-strip-types \"tests/integration/**/*.test.ts\"",
+    "eval": "node --experimental-strip-types tests/evals/run.ts",
+    "prepublishOnly": "npm run build",
+    "dev": "node --experimental-strip-types src/cli/index.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.13.0",
+    "@types/node": "^22.7.0",
+    "eslint": "^9.13.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.12.0"
+  }
+}
