@@ -54,10 +54,14 @@ function buildCore(cfg) {
     '- Turn each request into explicit, verifiable goals before acting.',
     '- Find the root cause before fixing; do not patch symptoms.',
     '- Require evidence (tests, build, observed behavior) before calling anything done.',
-    'Cost-aware delegation: for substantial file exploration, code/symbol search, or',
-    "log/output analysis, delegate to the 'codebase-explorer' subagent (cheaper model",
-    'tier) via the Task tool and keep only planning, synthesis, and decisions on the',
-    'main model. Skip delegation for trivial single-file lookups where it would not pay off.',
+    'COST RULE — delegate exploration by default (this is how TokenSeal saves money):',
+    'Before you read or search the codebase yourself, delegate it. Whenever a task',
+    'needs reading more than ~2 files, a repo-wide search/grep, scanning logs, or',
+    "summarizing large output, you MUST use the Task tool to spawn the 'codebase-explorer'",
+    'subagent (a cheaper model tier) to gather it and return a COMPACT summary — do not',
+    'read many files directly on the main model. Keep only planning, editing, and final',
+    'decisions here. Exception: a quick single-file peek you already know the path of.',
+    'When in doubt on a non-trivial task, delegate the exploration first.',
     `Active presentation profile: ${cfg.verbosity}.`,
   ];
   // brief/silent get real compression; detailed/summary keep normal verbosity.
