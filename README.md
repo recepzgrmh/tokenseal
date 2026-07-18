@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" alt="TokenSeal" width="380">
+  <img src="https://raw.githubusercontent.com/recepzgrmh/tokenseal/main/assets/logo.png" alt="TokenSeal" width="380">
 </p>
 
 <h1 align="center">TokenSeal&nbsp;🦭</h1>
