@@ -18,6 +18,27 @@
 
 ---
 
+## 🚀 Install & run
+
+```bash
+# 1. Install the CLI (not on npm yet → install from GitHub)
+npm install -g github:recepzgrmh/tokenseal
+
+# 2. Install the plugin into Claude Code — one-time, reversible
+tokenseal setup
+
+# 3. Keep using Claude Code exactly as before
+claude
+```
+
+`tokenseal setup` asks 4 quick questions, installs the plugin at user scope, and
+you're done. Restart any open `claude` session so it loads. Undo anytime with
+`tokenseal uninstall`.
+
+<sub>From a clone instead: `git clone https://github.com/recepzgrmh/tokenseal && cd tokenseal && npm install && npm link`</sub>
+
+---
+
 ## What it does, in one screen
 
 TokenSeal is a **plugin for Claude Code**. You install it once and keep running
@@ -107,25 +128,6 @@ implement → verify (tests/lint/build) → independent review
 - A **fresh-context reviewer** judges the diff and returns
   `approve | revise | escalate` — only `approve` clears the gate.
 - The loop is provably bounded; it can't revise/escalate forever.
-
-## Install
-
-> Not on npm yet (publishing pending). Install from GitHub:
-
-```bash
-npm install -g github:recepzgrmh/tokenseal
-# …or from a clone:  git clone … && cd tokenseal && npm install && npm link
-```
-
-Then set it up once (asks 4 quick questions about how chatty Claude should be):
-
-```bash
-tokenseal setup     # installs the plugin into ~/.claude, reversible
-claude              # keep working exactly as before
-```
-
-Restart any open `claude` session so the plugin loads. You'll see a short
-`🦭 TokenSeal active` line.
 
 ## Commands
 
